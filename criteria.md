@@ -23,8 +23,7 @@ For at least 4 of my 5 test questions, the retrieved chunks include one that
 contains the answer.
 
 **Why this target:**
-<!-- e.g. "One of my questions is about a topic only two documents mention, so
-     I expect that one to be hard." -->
+The campus_life documents are short posts, usually one to three paragraphs, and the useful information is often stated directly in one sentence. I expect the retriever to find the answer for most questions, while allowing one miss for questions whose wording differs from the source.
 
 ---
 
@@ -33,8 +32,7 @@ contains the answer.
 Every answer the system produces names at least one source document.
 
 **Why this target:**
-<!-- Why all five and not four? What about your setup makes that achievable —
-     or what would have to go wrong for it not to be? -->
+The retrieval results keep the original source filename for every chunk, and the answer is generated from those retrieved chunks. Requiring a source for every answer makes the result verifiable and should be achievable unless the generation step omits the citation.
 
 ---
 
@@ -50,8 +48,7 @@ in at least 4 of 5 tries.
      just keep five of them, or the "4 of 5" above has nothing to be 4 of. -->
 
 **Why this target:**
-<!-- What did your distances look like when you set the cutoff in Milestone 4?
-     Was there a clean gap, or did the two groups overlap? -->
+The five out-of-scope questions are about topics completely unrelated to student life, while the in-scope questions ask about documents in this corpus. Their relevance distances should therefore be separated well enough for the gate to reject most out-of-corpus questions, while allowing one failure for a generic word overlap.
 
 ---
 
@@ -69,9 +66,12 @@ in at least 4 of 5 tries.
        - "No chunk is shorter than 200 characters, since anything below that
           in my corpus turned out to be a heading with no content under it." -->
 
+For at least 4 of 5 sampled chunks, the chunk contains a complete, self-contained thought or answer without needing the previous or next chunk.
 
 
 **Why this target:**
+
+The campus_life documents are short, usually one to three paragraphs, and most useful information is concentrated in a single sentence. A chunk that preserves a complete thought should be enough to answer a question without requiring nearby context.
 
 
 
@@ -87,9 +87,12 @@ in at least 4 of 5 tries.
      present — anything, as long as it names a number or an observable
      outcome. -->
 
+For at least 4 of 5 test questions, the cited source document directly supports the answer given by the system.
 
 
 **Why this target:**
+
+Having a source name is not enough if the source does not actually support the response. The corpus contains many documents about similar campus topics, so checking source correctness tests whether the system retrieved evidence for the answer instead of relying on a vaguely related document.
 
 
 
