@@ -85,3 +85,14 @@ You can change your meal plan tier once, in the first ten days of the semester. 
 Innisfree Hall — what it's actually like
 
 Transferred in last year, so take this with a grain of salt. Built 1991, renovated 2022. Rooms are doubles arranged as pairs sharing one bathroom between two rooms.
+
+## Sample Answer
+
+<!-- One complete question and answer, pasted as text, with the source line
+     visible. Milestone 4. -->
+
+**Question:** What is the add/drop deadline?
+
+**Answer:**
+"You can add a course through the end of the second week. Dropping is a longer window — through the end of week six — but a drop after week two shows as a W on your transcript. Nothing anywhere on the registrar's site says this plainly, and students find out from each other."
+Source: admin_add_drop_deadline.txt#0
