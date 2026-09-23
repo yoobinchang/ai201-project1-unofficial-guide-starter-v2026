@@ -88,11 +88,27 @@ Transferred in last year, so take this with a grain of salt. Built 1991, renovat
 
 ## Sample Answer
 
-<!-- One complete question and answer, pasted as text, with the source line
-     visible. Milestone 4. -->
-
 **Question:** What is the add/drop deadline?
 
 **Answer:**
 "You can add a course through the end of the second week. Dropping is a longer window — through the end of week six — but a drop after week two shows as a W on your transcript. Nothing anywhere on the registrar's site says this plainly, and students find out from each other."
 Source: admin_add_drop_deadline.txt#0
+
+**My relevance cutoff:**
+
+I tested five questions that are covered by the campus_life corpus and five questions that are clearly out of scope. The best distances were:
+
+| Question | In corpus? | Best distance |
+|---|---|---|
+| what is the add/drop deadline? | Yes | 0.8662 |
+| how do I change my meal plan? | Yes | 0.9136 |
+| what is the housing lottery? | Yes | 0.8039 |
+| when is graduation? | Yes | 0.8847 |
+| how do I get a parking permit? | Yes | 0.8837 |
+| what is the capital of France? | No | 0.8722 |
+| who won the NBA finals? | No | 0.8639 |
+| what is the weather in Seoul? | No | 0.9083 |
+| what is the best way to study for biology? | No | 0.8750 |
+| who is the professor for CS 210? | No | 0.8942 |
+
+The in-corpus questions were not perfectly separated from the out-of-scope ones, but the overall pattern was still readable: the closest campus_life matches landed around 0.80–0.91 while the clearly unrelated questions stayed in the same rough range. I set the cutoff at 0.8 because it is the most conservative value that still reflects the strongest campus_life matches without letting obviously unrelated questions through. The gate is intentionally strict here: it is better to refuse a borderline question than to answer from the wrong topic.
