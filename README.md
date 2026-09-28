@@ -238,11 +238,11 @@ answers met this criterion (0/5).
 
 | # | Criterion | Verdict | How I decided |
 |---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| 1 | Retrieved chunks contain the answer | MISSED | The answer appeared in retrieved chunks for 1 of 5 questions in each run, below the target of 4 of 5. |
+| 2 | Every answer names a source | MISSED | All five in-scope answers were refusals with no source name, so the 5-of-5 target was not met. |
+| 3 | Gate stops out-of-corpus questions | MET | The gate refused all 5 out-of-corpus questions, exceeding the target of 4 of 5. |
+| 4 | Sampled chunks contain a complete thought | MET | All 5 sampled chunks expressed a complete thought without adjacent chunks, meeting the target of at least 4 of 5. |
+| 5 | Cited source directly supports the answer | MISSED | None of the five answers cited a source, so 0 of 5 had a cited source supporting the answer, below the target of 4 of 5. |
 
 ## Diagnoses
 
