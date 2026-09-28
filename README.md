@@ -155,15 +155,75 @@ The in-corpus questions were not perfectly separated from the out-of-scope ones,
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 1/5 | 1/5 | 1/5 | MISSED |
+| 2. Every answer names a source | 5 of 5 | 0/5 | 0/5 | 0/5 | MISSED |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Sampled chunks contain a complete thought | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Cited source directly supports the answer | 4 of 5 | 0/5 | 0/5 | 0/5 | MISSED |
 
-<!-- Underneath, paste the REAL output for each criterion from one of your
-     runs — the actual text your system produced, not a description of it.
-     Name the file and function that produced it. -->
+Run 1 evidence below is from `results/run_2026-09-23_1919_before.md`, produced by
+`run_eval.py::main`. Criterion 4 uses the five sampled chunks shown in Unit 1;
+chunking is deterministic, so its count is the same in each column.
+
+### Criterion 1 — Retrieved chunk contains the answer
+
+`store.py::search` retrieved `admin_wifi_and_accounts.txt` for the student-account
+question. The returned chunk contains the expected answer:
+
+> Your student account gives you campus wifi, printing, and a cloud drive with unlimited storage that most people never discover. The account stays active for six months after you graduate, and the cloud drive is purged at that point without a second warning.
+
+Only this one of the five questions had its expected answer in the retrieved
+chunks (1/5). The matching chunk was produced from the corpus by
+`chunker.py::split_documents`.
+
+### Criterion 2 — Every answer names a source
+
+For example, `run_eval.py::run_once` produced this answer for the first test
+question after the gate refused it:
+
+```text
+I don't have enough information about that.
+```
+
+The answer names no source; none of the five answers in a run names a source
+(0/5).
+
+### Criterion 3 — Gate stops out-of-corpus questions
+
+`run_eval.py::check_out_of_scope` reported this result for the first out-of-scope
+question:
+
+```text
+     refused  (best distance 0.864)  What is the capital of Mongolia?
+```
+
+The gate refused all five out-of-corpus questions (5/5); retrieval and the gate
+are deterministic, so the same count appears in all three columns.
+
+### Criterion 4 — Sampled chunks contain a complete thought
+
+One of the five chunks produced by `chunker.py::split_documents` was:
+
+```text
+On the meal plan changes
+
+You can change your meal plan tier once, in the first ten days of the semester. After that it's locked. Downgrading refunds the difference to your student account; upgrading bills you immediately.
+```
+
+All five sampled chunks in Unit 1 express a complete thought without needing an
+adjacent chunk (5/5).
+
+### Criterion 5 — Cited source directly supports the answer
+
+`run_eval.py::run_once` produced the refusal shown under Criterion 2 for the
+first in-scope question:
+
+```text
+I don't have enough information about that.
+```
+
+It cited no source, so no cited source could support the answer; none of the five
+answers met this criterion (0/5).
 
 ## Verdicts
 
