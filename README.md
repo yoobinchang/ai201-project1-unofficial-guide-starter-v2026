@@ -115,18 +115,16 @@ The in-corpus questions were not perfectly separated from the out-of-scope ones,
 
 ## How I Used AI
 
-<!-- Two specific moments. For each: what you asked for, what came back, and
-     what you changed about it.
-
-     "I asked Claude to write the chunking function from my notes. It ignored
-     the overlap, so I added that myself" is the level of detail we're after.
-     "I used AI to help me code" is not.
-
-     Milestone 5. -->
-
-**1.** I asked ChatGPT to help me decide how to chunk the campus_life documents. I gave it the goal of keeping each chunk readable and complete, and it suggested a 400-character target with some overlap. I compared that against the actual document structure and changed it to 400 characters with no overlap because the corpus mostly contains short, paragraph-like posts and the chunker already splits on blank lines.
+**1.** I asked AI to help me decide how to chunk the campus_life documents. I gave it the goal of keeping each chunk readable and complete, and it suggested a 400-character target with some overlap. I compared that against the actual document structure and changed it to 400 characters with no overlap because the corpus mostly contains short, paragraph-like posts and the chunker already splits on blank lines.
 
 **2.** I asked AI to help me interpret the retrieval distances for the relevance gate. I pasted in several example questions and their distances, then asked which threshold would best separate in-corpus questions from out-of-scope ones. It suggested a rough cutoff around 0.6–0.8, and I tested that against the actual retrieval output; after comparing the results, I set the cutoff at 0.8 because it was the most conservative value that still admitted the closest campus_life matches while refusing clearly unrelated questions.
+
+**3.** After the first evaluation, I asked AI to look for a pattern in the
+misses. It pointed out that all five in-scope questions were being refused by
+the gate even though their answers were present in the corpus. I checked the
+retrieved sources myself, then used that diagnosis to add BM25 keyword matching
+alongside the embedding search. I kept the change limited to retrieval so I
+could tell whether it actually helped.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
@@ -357,9 +355,27 @@ supporting-source check. The other four answers had supporting citations.
 
      Milestone 5. -->
 
+I did not miss any of the five targets after the change, but two individual
+answers still need attention. The work-study answer was correct but used
+`do not` instead of the scorer's expected `don't`, so the scorer marked it as a
+failure even though the meaning was right. The Innisfree laundry answer also
+gave the right price and payment method, but it cited
+`housing_innisfree_hall.txt` instead of the laundry document that actually
+supports those details.
+
+I would fix the scorer first so that harmless contractions and equivalent
+wording are accepted. Then I would make the generation prompt require the
+model to cite the exact filename containing the supporting sentence, rather
+than any related retrieved filename. I stopped after the retrieval change
+because all five criterion targets were met and I wanted to keep the
+experiment to one change.
+
 ## What I'd Do Differently
 
-<!-- Knowing what you know now — which of your five criteria would you write
-     differently, and why?
 
-     Milestone 5. -->
+I would write criterion 5 with a separate check for citation accuracy from the
+beginning. The current target measures whether the cited source supports the
+answer, but the evaluation output showed that a response can contain the right
+facts and still name a related but incorrect file. I would also make the
+scorer accept simple paraphrases, since exact string matching made the
+work-study result look worse than it was.
