@@ -297,7 +297,18 @@ answer or a supporting source could be produced.
 
 **What I changed:**
 
+I changed `store.py::search` to use a small hybrid search. It still uses the
+embedding distance, but it also gives a bonus to chunks whose words match the
+question. I included the source filename in the keyword search too, because
+the building name can be in the first chunk while the answer is in the next
+one.
+
 **Why I picked it:**
+
+The diagnosis showed that the answer chunks were already loaded and chunked,
+but semantic search ranked unrelated documents above them. This change deals
+with that retrieval problem directly without changing the chunker, gate, or
+generation prompt.
 
 <!-- Connect it to a specific diagnosis above in one sentence. If you can't,
      you picked a fix because it sounded impressive. -->
@@ -309,11 +320,11 @@ answer or a supporting source could be produced.
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Sampled chunks contain a complete thought | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Cited source directly supports the answer | 4 of 5 | 4/5 | 4/5 | 4/5 | MET |
 
 **Did it help?**
 
@@ -323,6 +334,18 @@ answer or a supporting source could be produced.
      tell.
 
      Milestone 4. -->
+
+It helped with the problem I was testing. Before the change, the gate refused
+all five in-scope questions. After adding keyword matching, all five answer
+chunks appeared in the top five and all five questions passed the gate. The
+out-of-scope questions were still refused 5/5.
+
+The generated answers were not all perfect, though. The work-study answer was
+correct but used `do not` instead of the scorer's expected phrase `don't`, so
+the scorer marked it as a fail. The Innisfree answer had the right facts but
+cited `housing_innisfree_hall.txt` instead of
+`housing_innisfree_hall_laundry.txt`, so that one failed the directly
+supporting-source check. The other four answers had supporting citations.
 
 ## What's Still Broken
 
