@@ -264,6 +264,35 @@ answers met this criterion (0/5).
 
      Milestone 3. -->
 
+The three misses came from the same problem. The files loaded correctly, and
+the answers are each kept in one chunk, so loading and chunking seem fine. The
+retrieved results were just not close enough: the best distances for the five
+questions were between 0.8691 and 0.9086, but the gate only allows distances
+under 0.6. Because of that, every question was refused before the model got to
+write an answer.
+
+### Criterion 1 — Retrieved chunks contain the answer
+
+This failed in the **retrieval stage**. The answer to the Old Brewhouse
+question is in `housing_old_brewhouse_laundry.txt`, but that chunk was not in
+the top five. Instead, the results were mostly dining, course, and housing
+noise documents. Its best distance was 0.9061, so the gate refused it as well.
+
+### Criterion 2 — Every answer names a source
+
+This failed at the **retrieval stage**, specifically when the gate checked the
+retrieval distance. All five best distances were above 0.6, so
+`run_eval.py::run_once` returned `I don't have enough information about that.`
+instead of calling `answer_from_chunks`. Since generation never ran, there was
+no chance to include a source.
+
+### Criterion 5 — Cited source directly supports the answer
+
+This was also a **retrieval-stage** problem. The Innisfree laundry answer is in
+`housing_innisfree_hall_laundry.txt`, but retrieval returned unrelated chunks
+and had a best distance of 0.9086. The gate stopped the question before an
+answer or a supporting source could be produced.
+
 ## The Improvement
 
 **What I changed:**
